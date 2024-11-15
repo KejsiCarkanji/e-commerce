@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useEffect, ReactNode } from "react";
+import { createContext, useState, useContext, ReactNode } from "react";
 import { getFromLocalStorage } from "../utils/localStorageUtils";
 
 interface Product {
@@ -21,11 +21,10 @@ interface ProductsContextProviderProps {
 }
 
 export const ProductsContextProvider = ({ children }: ProductsContextProviderProps) => {
-    const [products, setProducts] = useState<Product[]>([]);
-
-    useEffect(() => {
-            setProducts(getFromLocalStorage('products'));        
-    }, []);
+    const [products, setProducts] = useState<Product[]>(() => getFromLocalStorage('products')); 
+ 
+    // products supzohej te perdorej nga faqet e tjera qe supozohet te ishin ne sidebar,
+    // prandaj e kam vene ne context
 
     return (
         <ProductContext.Provider value={{ products, setProducts }}>

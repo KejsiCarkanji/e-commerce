@@ -34,7 +34,7 @@ export default function NavBars() {
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
-        {['All', 'Totes', 'Backpacks', 'Clutches', 'Crossbody Bags'].map((text, index) => (
+        {['All', 'Totes', 'Backpacks', 'Clutches', 'Crossbody Bags'].map((text) => (
           <ListItem key={text} disablePadding>
             <ListItemButton onClick={() => navigate('/products')}>
               <ListItemText primary={text} />
@@ -44,7 +44,7 @@ export default function NavBars() {
       </List>
       <Divider />
       <List>
-        {['New arrivals', 'Best sellers', 'Sale'].map((text, index) => (
+        {['New arrivals', 'Best sellers', 'Sale'].map((text) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemText primary={text} />
@@ -69,7 +69,7 @@ export default function NavBars() {
   return (
     <> 
     <Box sx={{ flexGrow: 1 }}> 
-      <AppBar position="fixed" sx={{ backgroundColor: '#444' }}>
+      <AppBar position="static" sx={{ backgroundColor: '#444' }}>
         <Toolbar>
           <IconButton
             size="large"
@@ -81,8 +81,7 @@ export default function NavBars() {
           >
             <MenuIcon />
           </IconButton>
-          <Button
-            
+          <Button           
             sx={{ mr: 2 , flexGrow: 1 }}
             onClick={() => navigate('/')}
           >

@@ -34,7 +34,7 @@ const AddProduct = () => {
                 const productData = {
                     id: Date.now().toString(), 
                     ...data,
-                    image: reader.result as string, // Convert the image file to a base64 string
+                    image: reader.result as string, 
                 };
 
                 existingProducts.push(productData);
@@ -61,11 +61,11 @@ const AddProduct = () => {
                 style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '10px',
+                    gap: '15px',
                     backgroundColor: '#e6e6e6',
                     padding: '20px',
                     borderRadius: '10px',
-                    width: '700px',
+                    width: '55%',
                     margin: '30px auto',
                 }}
             >

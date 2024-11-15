@@ -13,19 +13,17 @@ import ReusableForm from "../common/components/ReusableForm";
 import { getFromLocalStorage, saveToLocalStorage } from "../utils/localStorageUtils";
 import { useNavigate } from "react-router";
 
+
+
 export default function Checkout() {
     const [open, setOpen] = useState(false);
-    const navigate = useNavigate();
-
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
+    const navigate = useNavigate();   
   
     const handleClose = () => {
       setOpen(false);
     };
 
-    const handleSubmit = () => {
+    const handleOrder = () => {
         console.log("productsAdded", productsAdded);
         const existingOrders = getFromLocalStorage("productsOrdered");
         const updatedOrders = [...existingOrders, ...productsAdded];
@@ -36,9 +34,24 @@ export default function Checkout() {
         navigate('/history');
     };
 
-    const form = useForm();
-    const { reset } = form;
+    const form = useForm({
+      defaultValues: {
+        firstName: "",
+        lastName: "",
+        address: "",
+        city: "",
+        country: "",
+        postalCode: ""    
+      },    
+    });
+
+
+    const { reset, handleSubmit } = form;
     const {  calculateTotal, productsAdded, totalProducts, clearCart } = useCartContext();
+
+    const handleClickOpen = handleSubmit(() => { 
+      setOpen(true);
+  })
 
     return (
       <>
@@ -58,7 +71,7 @@ export default function Checkout() {
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-      >
+        >
         <DialogTitle id="alert-dialog-title">
           {"Are you sure you want to place your order?"}
         </DialogTitle>
@@ -69,7 +82,7 @@ export default function Checkout() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit} autoFocus>
+          <Button onClick={handleOrder} autoFocus>
             Confirm
           </Button>
         </DialogActions>

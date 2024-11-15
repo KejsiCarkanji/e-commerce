@@ -20,19 +20,19 @@ export default function Cart() {
         {productsAdded.length > 0 ? (
           <>
             {productsAdded.map((item: CartItem) => (
-              <Box key={item.product.id} sx={{ display: 'flex', marginBottom: 2 }}>
+              <Box key={item.product.id} sx={{ display: 'flex', marginBottom: 2}}>
                 <img src={item.product.image} alt={item.product.title} style={{ width: 100, height: 100, objectFit: 'cover', marginRight: 16 }} />
                 <Box sx={{ flexGrow: 1 }}>
                   <Typography variant="h6">{item.product.title}</Typography>
                   <Typography variant="body1">{item.product.price}€</Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Button onClick={() => addProduct(item.product)} variant="outlined" size="small" sx={{ mr: 1 }}>+</Button>
                     <Typography>{item.quantity}</Typography>
                     <Button onClick={() => decreaseQuantity(item.product)} variant="outlined" size="small" sx={{ ml: 1 }}>–</Button>
                     <IconButton onClick={() => deleteProduct(item.product)} sx={{ ml: 2 }}>
-                      <DeleteIcon />
+                      <DeleteIcon sx={{ color: 'white'}}/>
                     </IconButton>
-                  </Box>
+                </Box>
                 </Box>
               </Box>
             ))}

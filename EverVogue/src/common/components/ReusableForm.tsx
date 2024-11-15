@@ -8,7 +8,7 @@ interface ReusableFormProps {
     form: UseFormReturn<any>; 
 }
 
-const ReusableForm: React.FC<ReusableFormProps> = ({ formIndex, form }) => {
+const ReusableForm = ({ formIndex, form } : ReusableFormProps) => {
     const { register, formState: { errors } } = form;
 
     return (
@@ -16,14 +16,13 @@ const ReusableForm: React.FC<ReusableFormProps> = ({ formIndex, form }) => {
             {FORM_CONFIG[formIndex].map((field) => (
                 <TextField
                     key={field.name}
-                    {...register(field.name, { required: field.errorMessage })}
+                    {...register(field.name, { required: field.errorMessage  })}
                     label={field.label}
                     type={field.type}
                     variant={field.variant as "outlined" | "filled" | "standard"}
                     error={!!errors[field.name]}
                     helperText={(errors[field.name]?.message as string) || ''}
                     fullWidth
-                    required
                 />
             ))}
         </>

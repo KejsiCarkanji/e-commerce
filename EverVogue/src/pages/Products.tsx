@@ -3,8 +3,10 @@ import NavBars from "../common/components/NavBars";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
+import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
-import {  Button, TextField } from '@mui/material';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField'
 import Grid from '@mui/material/Grid2';
 import { useProductsContext } from '../store/useProductsContext';
 import { useState } from 'react';
@@ -22,19 +24,25 @@ interface Product {
 const Products = () => {
     const { products } = useProductsContext();
     const { addProduct } = useCartContext()
-    const [quantity, setQuantity] = useState(1);
+    const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
     const [open, setOpen] = useState(false);
-
-    const handleClick = (product: Product, quantity: number) => {
-        addProduct(product, quantity);
-        setOpen(true);
-    }
 
     const handleClose = ( event: React.SyntheticEvent | Event, reason?: string ) => {
         if (reason === 'clickaway') {
           return;
         }    
         setOpen(false);
+    };
+
+    const handleQuantityChange = (productId: string, newQuantity: number) => {
+        setQuantities( { ...quantities, [productId]: newQuantity });
+    };
+
+    const handleClick = (product: Product) => {
+        const quantity = quantities[product.id] || 1; 
+        addProduct(product, quantity);
+        setOpen(true);
+        setQuantities({ ...quantities, [product.id]: 1 });
     };
 
     return (
@@ -44,7 +52,7 @@ const Products = () => {
                 {products.length > 0 ? (
                     products.map((product: Product) => (
                         <Grid  size={{ xs: 12, sm: 4, md: 4 }} key={product.id} >
-                            <Card sx={{ height: '90%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', margin: 0, padding: 0}}>
                                 <CardMedia
                                     component="img"
                                     alt={product.title}
@@ -57,11 +65,14 @@ const Products = () => {
                                     <Typography variant="body1" color="textPrimary">
                                         ${product.price}
                                     </Typography>
-                                    <TextField type="number" size='small' sx={{width: '30%', marginTop: '8px'}} label="Quantity" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}/>
-                                    <Button variant="contained" onClick={() => handleClick( product, quantity)} color="primary" style={{ marginTop: '10px' }} >
+                                    <TextField type="number" size='small' sx={{width: '30%', marginTop: '8px'}} label="Quantity" value={quantities[product.id] || 1} 
+                                    onChange={(e) => handleQuantityChange(product.id, Number(e.target.value))}/>
+                                </CardContent>
+                                <CardActions style={{ marginTop: '10px' }}>
+                                    <Button variant="contained" onClick={() => handleClick( product )} color="primary">
                                         Add to Cart
                                     </Button>
-                                </CardContent>
+                                </CardActions>
                             </Card>
                         </Grid>
                     ))
@@ -71,14 +82,12 @@ const Products = () => {
                     </Typography>
                 )}
             </Grid>
-            <div>
-      <SnackBar
-        open={open}
-        autoHideDuration={700}
-        onClose={handleClose}
-        message="Product added to cart"       
-      />
-    </div>
+            <SnackBar
+                open={open}
+                autoHideDuration={700}
+                onClose={handleClose}
+                message="Product added to cart"       
+            />    
         </>
     );
 };
