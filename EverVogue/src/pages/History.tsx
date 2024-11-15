@@ -1,31 +1,17 @@
-import NavBars from "../common/layout/NavBars"
+import NavBars from "../common/components/NavBars"
 import React, { useEffect, useState } from "react";
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-
-interface Product {
-  id: string;
-  title: string;
-  price: number;
-  description: string;
-  image: string;
-}
-
-interface CartItem {
-  product: Product;
-  quantity: number;
-}
+import { CartItem } from "../common/types/types.ts";
+import { getFromLocalStorage } from "../utils/localStorageUtils.ts";
 
 const History: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
-    // Retrieve products with quantities from local storage
-    const storedProducts = localStorage.getItem("productsOrdered");
-    if (storedProducts) {
-        setCartItems(JSON.parse(storedProducts));
-    }
-}, []);
+    setCartItems(getFromLocalStorage('productsOrdered'))
+  }, []);
+  
   return (
     <>
     <NavBars />

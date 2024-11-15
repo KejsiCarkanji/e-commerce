@@ -1,7 +1,8 @@
-import NavBars from "../common/layout/NavBars";
+import NavBars from "../common/components/NavBars";
 import { useForm } from 'react-hook-form';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import ReusableForm from "../common/components/ReusableForm";
+import { saveToLocalStorage } from "../utils/localStorageUtils";
 
 interface Product {
     title: string;
@@ -11,7 +12,7 @@ interface Product {
 }
 
 const AddProduct = () => {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm<Product>({
+    const form = useForm<Product>({
         defaultValues: {
             title: '',
             price: '',
@@ -19,6 +20,8 @@ const AddProduct = () => {
             image: null,
         },
     });
+
+    const { handleSubmit, reset } = form;
 
     const onSubmit = (data: Product) => {
         const existingProducts = JSON.parse(localStorage.getItem('products') || '[]');
@@ -28,26 +31,21 @@ const AddProduct = () => {
             const reader = new FileReader();
             
             reader.onloadend = () => {
-                // Create the product object with base64 image and a unique id
                 const productData = {
-                    id: Date.now().toString(), // Add unique id here
+                    id: Date.now().toString(), 
                     ...data,
                     image: reader.result as string, // Convert the image file to a base64 string
                 };
 
                 existingProducts.push(productData);
 
-                // Save updated products list to local storage
-                localStorage.setItem('products', JSON.stringify(existingProducts));
+                saveToLocalStorage('products', existingProducts);
 
-                console.log('Product added:', productData);
-
-                // Reset the form fields using reset()
                 reset({
                     title: '',
                     price: '',
                     description: '',
-                    image: null, // Reset image to null
+                    image: null
                 });
             };
 
@@ -68,36 +66,12 @@ const AddProduct = () => {
                     padding: '20px',
                     borderRadius: '10px',
                     width: '700px',
-                    marginTop: '10px',
+                    margin: '30px auto',
                 }}
             >
-                <TextField
-                    label="Title"
-                    {...register('title', { required: 'Title is required' })}
-                    error={!!errors.title}
-                    helperText={errors.title?.message}
-                    fullWidth
-                    required
-                />
-                <TextField
-                    label="Price"
-                    {...register('price', { required: 'Price is required' })}
-                    fullWidth
-                    required
-                />
-                <TextField
-                    label="Description"
-                    {...register('description', { required: 'Description is required' })}
-                    fullWidth
-                    required
-                />
-                <TextField
-                    type="file"
-                    {...register('image', { required: 'Image is required' })}
-                    error={!!errors.image}
-                    helperText={errors.image?.message || 'Select an image'}
-                    fullWidth
-                    required
+                <ReusableForm
+                formIndex={1}
+                form={form}
                 />
                 <Button type="submit" variant="contained" color="primary">
                     Add Product
@@ -105,6 +79,6 @@ const AddProduct = () => {
             </form>
         </>
     );
-};
 
+};
 export default AddProduct;

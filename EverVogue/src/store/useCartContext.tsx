@@ -1,20 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from "react";
+import { CartItem, Product } from "../common/types/types";
+import { saveToLocalStorage } from "../utils/localStorageUtils";
 
-// Define types for product and cart item
-interface Product {
-    id: string;
-    title: string;
-    price: number;
-    description: string;
-    image: string;
-}
-
-interface CartItem {
-    product: Product;
-    quantity: number;
-}
-
-// Define the context type
 interface CartContextType {
     productsAdded: CartItem[];
     addProduct: (product: Product, quantity?: number) => void;
@@ -25,7 +12,6 @@ interface CartContextType {
     calculateTotal: () => number;
 }
 
-// Create the context with an initial value of undefined
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 interface CartContextProviderProps {
@@ -41,7 +27,7 @@ export const CartContextProvider: React.FC<CartContextProviderProps> = ({ childr
     const [productsAdded, setProductsAdded] = useState<CartItem[]>(() => getStoredProducts());
 
     useEffect(() => {
-        localStorage.setItem("productsAdded", JSON.stringify(productsAdded));
+        saveToLocalStorage("productsAdded", productsAdded);
     }, [productsAdded]);
 
     const addProduct = (product: Product, quantity: number = 1): void => {
@@ -96,7 +82,6 @@ export const CartContextProvider: React.FC<CartContextProviderProps> = ({ childr
     );
 };
 
-// Custom hook for using the ProductContext
 export const useCartContext = (): CartContextType => {
     const context = useContext(CartContext);
     if (!context) {

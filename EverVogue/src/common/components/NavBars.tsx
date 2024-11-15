@@ -54,7 +54,7 @@ export default function NavBars() {
       </List>
       <Divider /> 
       <List>
-        {['Add product', 'History'].map((text, index) => (
+        {['Add product', 'History'].map((text) => (
           <ListItem key={text} disablePadding>
             <ListItemButton onClick={() => {
               (text === "Add product") ? navigate('/add-product') : navigate('/history')}}>
@@ -69,7 +69,7 @@ export default function NavBars() {
   return (
     <> 
     <Box sx={{ flexGrow: 1 }}> 
-      <AppBar position="static">
+      <AppBar position="fixed" sx={{ backgroundColor: '#444' }}>
         <Toolbar>
           <IconButton
             size="large"

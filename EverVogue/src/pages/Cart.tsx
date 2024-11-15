@@ -2,24 +2,11 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import NavBars from "../common/layout/NavBars";
+import NavBars from "../common/components/NavBars";
 import { useCartContext } from "../store/useCartContext";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
-
-
-interface Product {
-    id: string;
-    title: string;
-    price: number;
-    description: string;
-    image: string;  
-}
-
-interface CartItem {
-  product: Product;
-  quantity: number;
-}
+import { CartItem } from '../common/types/types.ts';
 
 export default function Cart() {
   const { productsAdded, addProduct, decreaseQuantity, deleteProduct, 
@@ -29,7 +16,7 @@ export default function Cart() {
   return (
     <Box >
       <NavBars />
-      <Box sx={{ mt: 2, padding: 2 }}>
+      <Box sx={{ mt: 2, padding: 2}}>
         {productsAdded.length > 0 ? (
           <>
             {productsAdded.map((item: CartItem) => (
@@ -49,11 +36,11 @@ export default function Cart() {
                 </Box>
               </Box>
             ))}
-            <Typography variant="h6" sx={{ mt: 2 }}>Total: {calculateTotal()}€</Typography>
-            <Button onClick={clearCart} variant="contained" color="secondary" sx={{ mt: 2 }}>
+            <Typography variant="h4" sx={{ mt: 2, marginTop: '40px' }}>Total: {calculateTotal()}€</Typography>
+            <Button onClick={clearCart} variant="contained" color="secondary" sx={{ mt: 2, margin: '20px'}}>
               Clear Cart
             </Button>
-            <Button onClick={() => navigate('/checkout')} variant="contained" color="primary" sx={{ mt: 2 }}>Checkout</Button>
+            <Button onClick={() => navigate('/checkout')} variant="contained" color="primary" sx={{ mt: 2, margin: '20px' }}>Checkout</Button>
           </>
         ) : (
           <Typography variant="h6">Cart is empty</Typography>
