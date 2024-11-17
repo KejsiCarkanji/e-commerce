@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import ReusableForm from "../common/components/ReusableForm";
 import { saveToLocalStorage } from "../utils/localStorageUtils";
+import { useProductsContext } from "../store/useProductsContext";
 
 interface Product {
     title: string;
@@ -20,6 +21,8 @@ const AddProduct = () => {
             image: null,
         },
     });
+
+    const { products, setProducts } = useProductsContext();
 
     const { handleSubmit, reset } = form;
 
@@ -40,6 +43,7 @@ const AddProduct = () => {
                 existingProducts.push(productData);
 
                 saveToLocalStorage('products', existingProducts);
+                setProducts(existingProducts);                 
 
                 reset({
                     title: '',
